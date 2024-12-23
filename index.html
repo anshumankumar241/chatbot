@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>GBU Query Chatbot</title>
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+  
+  background-image: url('bgpic.jpeg'); 
+  background-size: cover; 
+  background-repeat: no-repeat; 
+  background-position: center center; 
+  margin: 0;
+  padding: 0;
+      
+    }
+
+    .chat-container {
+      max-width: 600px;
+      margin: 50px auto;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+      background-color: #34495e;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      border-radius: 8px 8px 0 0;
+      position: relative;
+    }
+
+    .header img {
+      width: 80px;
+      height: auto;
+      border-radius: 50%;
+      position: absolute;
+      top: 5px;
+      left: 10px;
+    }
+
+    .header h2 {
+      margin: 0;
+      padding-left: 100px; /* To adjust the text to the right of the logo */
+    }
+
+    .chat-box {
+      max-height: 400px;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .chat-box .message {
+      display: flex;
+      margin-bottom: 10px;
+    }
+
+    .message.user-message {
+      justify-content: flex-end;
+    }
+
+    .message.bot-message {
+      justify-content: flex-start;
+    }
+
+    .message .bubble {
+      max-width: 80%;
+      padding: 10px;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+
+    .message.user-message .bubble {
+      background-color: #4CAF50;
+      color: white;
+      border-bottom-right-radius: 0;
+    }
+
+    .message.bot-message .bubble {
+      background-color: #ecf0f1;
+      color: black;
+      border-bottom-left-radius: 0;
+    }
+
+    .input-box {
+      display: flex;
+      border-top: 1px solid #ddd;
+    }
+
+    .input-box input {
+      flex: 1;
+      padding: 15px;
+      border: none;
+      border-radius: 0 0 0 8px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .input-box button {
+      padding: 0 20px;
+      background-color: #34495e;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 0 0 8px 0;
+      transition: background-color 0.3s ease;
+    }
+
+    .input-box button:hover {
+      background-color: #2c3e50;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="chat-container">
+    <div class="header">
+      <img src="logo.jpg" alt="GBU Logo">
+      <h2>GBU Query Chatbot</h2>
+    </div>
+    <div class="chat-box" id="chatBox">
+      <div class="message bot-message">
+        <div class="bubble">Hello! How can I assist you with your queries about Gautam Buddha University?</div>
+      </div>
+    </div>
+    <div class="input-box">
+      <input type="text" id="userInput" placeholder="Type your query here..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+   function sendMessage() {
+  const userInput = document.getElementById('userInput');
+  const message = userInput.value.trim();
+  if (message) {
+    addMessage(message, 'user-message');
+    setTimeout(() => {
+      getBotResponse(message);
+    }, 1000);
+    userInput.value = '';
+  }
+}
+
+function addMessage(text, messageType) {
+  const chatBox = document.getElementById('chatBox');
+  const messageDiv = document.createElement('div');
+  messageDiv.classList.add('message', messageType);
+
+  const bubbleDiv = document.createElement('div');
+  bubbleDiv.classList.add('bubble');
+  bubbleDiv.textContent = text;
+
+  messageDiv.appendChild(bubbleDiv);
+  chatBox.appendChild(messageDiv);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function getBotResponse(userMessage) {
+  let botResponse = '';
+
+  if (userMessage.toLowerCase().includes('admission')) {
+    botResponse = 'Admissions at GBU open in May. Visit the official website for details.http://www.gbu.ac.in/';
+  } else if (userMessage.toLowerCase().includes('courses')) {
+    botResponse = getCoursesList(); // Get the list of courses
+  } else if (userMessage.toLowerCase().includes('department')) { 
+    botResponse = getDepartmentList(); // Get the list of departments
+  } else if (userMessage.toLowerCase().includes('hostel')){
+    botResponse = getHostelList();//Get the list of hostel
+  }
+  else if(userMessage.toLowerCase().includes('faculty')){
+    botResponse = getFacultyList(); //Get the list of faculty
+  }else if(userMessage.toLowerCase().includes('fee')){
+    botResponse = getFeeList(); //Get the list of fee
+  }
+  else if (userMessage.toLowerCase().includes('location')){
+    botResponse = getLocation();//Get the detail of location
+  }
+  else if (userMessage.toLowerCase().includes('registrar')){
+    botResponse = getRegistrar();//Get the list of registrar
+  }else if (userMessage.toLowerCase().includes('vc')){
+    botResponse = getViceChancellor();//Get the list of viceChancellor
+  }else if (userMessage.toLowerCase().includes('admin')){
+    botResponse = getAdmin();//Get the detail of admin
+  }
+  else {
+    botResponse = 'Hi, I am the GBU Query System, still learning. I will help you soon!';
+  }
+
+  addMessage(botResponse, 'bot-message');
+}
+
+function getCoursesList() {
+  return `Gautam Buddha University offers the following courses:
+
+  Undergraduate Courses:
+  - B.Tech (Computer Science and Engineering)\n
+  - B.Tech (Electronics and Communication Engineering)\n
+  - B.Tech (Mechanical Engineering)\n
+  - B.Arch (Bachelor of Architecture)\n
+  - B.A. (Hons) in Buddhist Studies and Civilization\n
+  - B.Sc. in Biotechnology\n
+  - BBA (Bachelor of Business Administration)\n
+  - B.Com (Bachelor of Commerce)\n
+
+  Postgraduate Courses:
+  - M.Tech (Computer Science and Engineering)\n
+  - MBA (Master of Business Administration)\n
+  - M.A. in English\n
+  - M.Sc. in Biotechnology\n
+  - Master of Public Policy (MPP)\n
+  - M.A. in Political Science\n
+  
+  Doctoral Programs:
+  - Ph.D. in Engineering\n
+  - Ph.D. in Management\n
+  - Ph.D. in Biotechnology\n
+  - Ph.D. in Social Work\n
+  
+  For a full list of courses and more details, visit the official university website: http://www.gbu.ac.in/`;
+}
+
+function getDepartmentList() {
+  return `Gautam Buddha University has the following departments:
+
+1. **School of Engineering**:
+   - Department of Computer Science and Engineering\n
+   - Department of Electronics and Communication Engineering\n
+   - Department of Mechanical Engineering\n
+   - Department of Civil Engineering\n
+   - Department of Electrical Engineering\n
+   - Department of Architecture and Planning\n
+
+2. **School of Information and Communication Technology (ICT)**:
+   - Department of Information Technology\n
+   - Department of Communication Technology\n
+
+3. **School of Biotechnology**:
+   - Department of Biotechnology\n
+
+4. **School of Management**:
+   - Department of Business Administration\n
+
+5. **School of Humanities and Social Sciences**:
+   - Department of English\n
+   - Department of Political Science\n
+   - Department of Economics\n
+   - Department of Social Work\n
+   - Department of Psychology\n
+   - Department of History and Civilization\n
+   - Department of Sociology\n
+
+6. **School of Buddhist Studies and Civilization**:
+   - Department of Buddhist Studies\n
+
+7. **School of Law, Justice and Governance**:
+   - Department of Law\n
+
+8. **School of Vocational Studies and Applied Sciences**:
+   - Department of Applied Chemistry\n
+   - Department of Applied Physics\n
+   - Department of Applied Mathematics\n
+   - Department of Environmental Science\n
+
+9. **School of Education**:
+   - Department of Education\n
+
+10. **School of Public Policy and Governance**:
+   - Department of Public Policy\n
+
+For more details about the departments, visit the official Gautam Buddha University website: http://www.gbu.ac.in/`;
+}
+function getHostelList() {
+    return `Gautam Buddha University has the following hostels:
+
+**Boys' Hostels**:
+- Maharshi Valmiki Hostel\n
+- Rahim Das Hostel\n
+- Malik Muhammad Jayasi Hostel\n
+- Munshi Prem Chand Hostel\n
+- Guru Ghashi Das Hostel\n
+- Ram Sharan Das Hostel\n
+- Tulsi Das Hostel\n
+- Narayan Guru Hostel\n
+- Birsa Munda Hostel\n
+- Sant Kabir Das Hostel\n
+- Sant Ravidas Hostel\n
+
+**Girls' Hostels**:
+- Ismat Chugtai Hostel\n
+- Maha Maya Hostel\n
+- Maha Devi Verma Hostel\n
+- Rani Laxmi Bai Hostel\n
+- Chhatrapati Sahu Ji Maharaj Hostel\n
+- Savitri Bai Phule Hostel\n
+- Rama Bai Ambedkar Hostel\n
+For more details about hostels,visit the official website of Gautam Buddha University.http://www.gbu.ac.in/`;
+}
+function getFacultyList() {
+  return `Gautam Buddha University has the following Faculty:
+  
+  Prof. Sanjay Kumar Sharma
+  Professor
+  University School of Information and Communication Technology
+  Department of Information Technology
+
+  Dr. Arpit Bhardwaj
+  Associate Professor and Dean (I/C)
+  University School of Information and Communication Technology
+  Department of Computer Science & Engineering
+
+  Dr. Arun Solanki
+  Assistant Professor and HoD
+  University School of Information and Communication Technology
+  Department of Computer Science & Engineering
+
+  Dr. Neeta Singh
+  Assistant Professor and HoD
+  University School of Information and Communication Technology
+  Department of Information Technology
+
+  Dr. Vidushi Sharma
+  Assistant Professor and HoD
+  University School of Information and Communication Technology
+  Department of Electronics and Communication Engineering
+
+  Dr. Aarti Gautam Dinker
+  Assistant Professor
+  University School of Information and Communication Technology
+  Department of Computer Science & Engineering
+
+  Dr. Akash Kumar
+  Assistant Professor
+  University School of Information and Communication Technology
+  Department of Information Technology
+
+  Dr. Anika
+  Assistant Professor
+  University School of Information and Communication Technology
+  Department of Computer Science & Engineering
+
+  Dr. Anurag Singh Baghel
+  Assistant Professor
+  University School of Information and Communication Technology
+  Department of Computer Science & Engineering
+
+  Dr. Gaurav Kumar
+  Assistant Professor
+  University School of Information and Communication Technology
+  Department of Computer Science & Engineering
+
+  Dr. Mangal Das
+  Assistant Professor
+  University School of Information and Communication Technology
+  Department of Electronics and Communication Engineering
+
+  Dr. Navaid Zafar Rizvi
+  Assistant Professor
+  University School of Information and Communication Technology
+  Department of Electronics and Communication Engineering
+
+  Dr. Nitesh Singh Bhati
+  Assistant Professor
+  University School of Information and Communication Technology
+  Department of Computer Science & Engineering
+
+  Dr. Pradeep Tomar
+  Assistant Professor
+  University School of Information and Communication Technology
+  Department of Computer Science & Engineering
+
+  Dr. Priyanka Goyal
+  Assistant Professor
+  University School of Information and Communication Technology
+  Department of Electronics and Communication Engineering
+
+  Dr. Rahul Kumar
+  Assistant Professor
+  University School of Information and Communication Technology
+  Department of Computer Science & Engineering
+
+  Dr. Rajendra Bahadur Singh
+  Assistant Professor
+  University School of Information and Communication Technology
+  Department of Computer Science & Engineering
+
+  Dr. Rajesh Mishra
+  Assistant Professor
+  University School of Information and Communication Technology
+  Department of Electronics and Communication Engineering
+
+  Dr. Raju Pal
+  Assistant Professor
+  University School of Information and Communication Technology
+  Department of Computer Science & Engineering
+
+  Dr. Rakesh Kumar
+  Assistant Professor
+  University School of Information and Communication Technology
+  Department of Computer Science & Engineering
+
+  Dr. Shiraz Khurana
+  Assistant Professor
+  University School of Information and Communication Technology
+  Department of Computer Science & Engineering
+
+  Dr. Vimlesh Kumar Ray
+  Assistant Professor
+  University School of Information and Communication Technology
+  Department of Computer Science & Engineering
+
+  Mr. Kartikeya Tiwari
+  Assistant Professor
+  University School of Information and Communication Technology
+  Department of Computer Science & Engineering
+
+  Dr. Maneet Singh
+  Assistant Professor
+  University School of Information and Communication Technology
+  Department of Information Technology
+
+For more details about hostels, visit the official website of Gautam Buddha University: http://www.gbu.ac.in/`;
+}
+
+
+function getFeeList(){
+  return `Gautam Buddha University has the following Fee:
+Common Fees for All Programs:
+
+Registration Fee (One-Time, Non-Refundable): ₹10,000
+Security Fee (One-Time, Refundable): ₹10,000
+Library Fee (One-Time): ₹2,000
+Sports Fee (One-Time): ₹2,000
+
+Program-Specific Fees:
+
+School of Engineering:
+
+Bachelor of Technology (B.Tech.) in Mechanical Engineering, Electrical Engineering, Civil Engineering:
+Examination Fee (Per Semester): ₹1,500
+Academic Fee (Per Semester): ₹75,000
+Bachelor of Architecture (B.Arch.):
+Examination Fee (Per Semester): ₹1,500
+Academic Fee (Per Semester): ₹1,00,000
+Bachelor of Design (Interior Design):
+Examination Fee (Per Semester): ₹1,500
+Academic Fee (Per Semester): ₹42,000
+Master of Technology (M.Tech.):
+Examination Fee (Per Semester): ₹1,500
+Academic Fee (Per Semester): ₹60,000
+
+School of Information and Communication Technology:
+
+B.Tech. in Computer Science and Engineering (CSE):
+Examination Fee (Per Semester): ₹1,500
+Academic Fee (Per Semester): ₹75,000
+B.Tech. in CSE with Specializations (e.g., Artificial Intelligence, Data Science):
+Examination Fee (Per Semester): ₹1,500
+Academic Fee (Per Semester): ₹1,35,000
+Bachelor of Computer Applications (BCA):
+Examination Fee (Per Semester): ₹1,500
+Academic Fee (Per Semester): ₹35,000
+Master of Computer Applications (MCA):
+Examination Fee (Per Semester): ₹1,500
+Academic Fee (Per Semester): ₹45,000
+
+School of Management:
+
+Master of Business Administration (MBA):
+Examination Fee (Per Semester): ₹1,500
+Academic Fee (Per Semester): ₹1,24,000
+
+School of Biotechnology:
+
+Bachelor of Science (B.Sc.) in Biotechnology:
+Examination Fee (Per Semester): ₹1,500
+Academic Fee (Per Semester): ₹50,000
+Master of Science (M.Sc.) in Biotechnology:
+Examination Fee (Per Semester): ₹1,500
+Academic Fee (Per Semester): ₹50,000
+
+Additional Notes:
+Hostel Fees: For Indian Nationals, the hostel fee is ₹30,000 per academic year for a single-seated room and ₹20,000 for a double-seated room.
+Foreign Nationals: The fee structure for foreign nationals from SAARC and ASEAN nations is the same as for Indian nationals. However, additional registration fees apply:
+Non-Technical/Non-Professional Programs: US $700 (or equivalent in Indian currency)
+Technical/Professional Programs: US $1,500 (or equivalent in Indian currency)
+  For more details about hostels,visit the official website of Gautam Buddha University.http://www.gbu.ac.in/`;
+}
+function getLocation(){
+  return `Gautam Buddha University has the following location:
+  Gautam Buddha University, Greater Noida, Opp. Yamuna Expressway, Gautam Buddha Nagar, Uttar Pradesh-201312
+   For more details about hostels,visit the official website of Gautam Buddha University.http://www.gbu.ac.in/`;
+
+}
+function getRegistrar(){
+  return `Gautam Buddha University has the following registrar:
+  Dr.Vishwas Tripathi
+  For more details about hostels,visit the official website of Gautam Buddha University.http://www.gbu.ac.in/`;
+}
+function getViceChancellor(){
+  return `Gautam Buddha University has the following viceChancellor:
+  Prof.Ravindra Kumar Sinha
+  For more details about hostels,visit the official website of Gautam Buddha University.http://www.gbu.ac.in/`;
+}
+function getAdmin(){
+  return `Gautam Buddha University has the following admin:
+  Sh. Niraj Kumar: Finance Officer, 
+Dr. Krishna Kant Dwivedi: Deputy Registrar, 
+Dr. Vivek Kumar Mishra: Director Works and Assistant Registrar(Admission),
+Dr. C. S. Paswan: Assistant Registrar (Academics),
+Dr.Manmohan Singh Sisodiya,DSA,
+Prof.N P Malkania,Dean(Academics)
+  For more details about hostels,visit the official website of Gautam Buddha University.http://www.gbu.ac.in/`;
+}
+
+
+  </script>
+
+</body>
+</html>
